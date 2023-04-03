@@ -1,0 +1,11 @@
+.StroopPage {
+    background-color: black;
+    text-align: center;
+    height: 50vh;
+    width: 100vw;
+}
+
+.StroopPage>span {
+    color: white;
+    font-size: 40vh;
+}

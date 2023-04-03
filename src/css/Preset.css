@@ -1,0 +1,36 @@
+.PairContainer {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.PresetElement {
+    display: flex;
+    background-color: #eeeeee;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 0px 15px 0px 15px;
+    border: solid #000;
+    border-width: 2px 2px 2px 2px;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.PresetElement>button {
+    border: dashed grey;
+    border-width: 2px 2px 2px 2px;
+    border-radius: 100%;
+    align-items: center;
+    margin-right: 10px;
+    color: grey
+}
+
+.PresetElement>span {
+    font-size: 22px;
+}
+
+.PresetElement>div {
+    width: 20px;
+    height: 20px;
+    background-color: aqua;
+}

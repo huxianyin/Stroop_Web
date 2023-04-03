@@ -1,23 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import logo from './resources/stroop.png' 
+import Preset from './components/Preset';
+import BasicBlocks from './components/BasicBlocks';
+import CompoundedBlocks from './components/CompoundedBlocks';
+import { Button } from '@mui/material';
+import { useState } from 'react';
+import Stroop from './components/Stroop';
 
 function App() {
+
+  const [started, setStarted] = useState(false);
+  const [taskData, setTaskData] = useState([]);
+  const [preset, setPreset] = useState([]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div class="App">
+      {!started?
+      <div>
+        <header class="App-header">
+          <img src={logo} alt="Logo"/>
+          <h1>Customizable Stroop Task</h1>
+          <img src={logo} alt="Logo"/>
+        </header>
+
+        <div class='body'>
+          <Preset></Preset>
+          <BasicBlocks></BasicBlocks>
+          <CompoundedBlocks></CompoundedBlocks>
+          <Button onClick= {()=>{setStarted(true)}}>Start</Button>
+        </div>
+        <footer>
+          <span>developed by <a href='http://www.lhei.k.u-tokyo.ac.jp/'>Heilab</a></span>
+        </footer>
+      </div> :<Stroop onFinished={()=>{setStarted(false);}}/>
+      }
     </div>
   );
 }

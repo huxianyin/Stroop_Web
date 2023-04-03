@@ -1,0 +1,26 @@
+.BasicBlock {
+    background-color: #eeeeee;
+    margin-right: 10px;
+    width: 100px;
+    border: solid #000;
+    border-width: 2px 2px 2px 2px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 5px 10px pink;
+}
+
+.BasicBlock>p {
+    align-self: center;
+}
+
+.AddBtn {
+    background-color: transparent;
+    border: dashed grey;
+    border-width: 2px 2px 2px 2px;
+    border-radius: 30px;
+}
+
+.ButtonContainer {
+    display: flex;
+    justify-content: space-around;
+}

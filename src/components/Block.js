@@ -32,7 +32,7 @@ function Block(props) {
             <p>{props.title}</p>
             {logo()}
             <div class="ButtonContainer">
-            <Button>Detail</Button>
+            <Button className="AddBtn">+</Button>
             </div>
         </div>
     );

@@ -75,6 +75,7 @@ function CompoundBlock(props) {
                 InputLabelProps={{ shrink: true }}
                 />
             </div>
+            <Button className="AddBtn">+</Button>
         </div>
     );
 

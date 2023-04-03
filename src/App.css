@@ -82,8 +82,7 @@ footer {
 .flowBlock {
     background-color: transparent;
     margin: 10px;
-    height: 8vh;
-    border-width: 5px 5px 5px 5px;
+    height: 10vh;
     padding: 5px;
     position: relative;
 }
@@ -91,9 +90,8 @@ footer {
 .finishBlock {
     background-color: transparent;
     margin: 10px;
-    height: 8vh;
-    border-width: 5px 5px 5px 5px;
-    border: solid white;
+    height: 10vh;
+    border: solid white 5px;
     padding: 5px;
 }
 
@@ -105,38 +103,38 @@ footer {
     content: "";
     position: absolute;
     top: 50%;
-    right: -15px;
+    right: -22px;
     /* Adjust the distance of the arrow from the block */
     transform: translateY(-50%);
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-left: 10px solid white;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid white;
     /* Change the color and size of the arrow here */
 }
 
 .incongruent {
-    border: solid rgb(242, 119, 122)
+    border: solid rgb(242, 119, 122) 5px;
 }
 
 .congruent {
-    border: solid #80ff00ba
+    border: solid #80ff00ba 5px;
 }
 
 .word-only {
-    border: solid rgb(102, 153, 204);
+    border: solid rgb(102, 153, 204) 5px;
 }
 
 .read-only {
-    border: solid rgb(255, 204, 102);
+    border: solid rgb(255, 204, 102) 5px;
 }
 
 .rest {
-    border: solid rgb(204, 204, 204);
+    border: solid rgb(204, 204, 204) 5px;
 }
 
 .flowBlock>.info>span {
     color: white;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .flowBlock>.detail {

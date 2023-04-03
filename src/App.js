@@ -21,6 +21,12 @@ function App() {
     {"type":"word-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
     {"type":"read-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
     {"type":"rest", "dur":10,"text":"休憩してください"},
+
+    {"type":"word-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
+    {"type":"incongruent", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
+    {"type":"congruent", "n":10, "duration":default_present_duration, "retention_interval":default_retention_interval},
+    {"type":"read-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
+    {"type":"rest", "dur":20,"text":"休憩してください"},
   ]
 
   const [started, setStarted] = useState(false);

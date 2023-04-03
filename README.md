@@ -1,6 +1,6 @@
-# Stroop Web Application
+# Customizable Stroop
 A web application for stroop task that experimenters can customize their own stroop task easily! 
-> 🧩 Have A Try!
+> **🧩 Have A Try!**
 > 
 > drag and drop basic building blocks to design a stroop task!
 

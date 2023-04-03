@@ -1,6 +1,7 @@
 .BasicBlock {
     background-color: #eeeeee;
     margin-right: 10px;
+    margin-bottom: 10px;
     width: 100px;
     border: solid #000;
     border-width: 2px 2px 2px 2px;
@@ -23,4 +24,24 @@
 .ButtonContainer {
     display: flex;
     justify-content: space-around;
+}
+
+.CompoundBlock {
+    background-color: #eeeeee;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 80%;
+    border: solid #000;
+    border-width: 2px 2px 2px 2px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 5px 10px lightgreen;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    grid-auto-rows: minmax(60px, auto);
+    padding: 10px
 }

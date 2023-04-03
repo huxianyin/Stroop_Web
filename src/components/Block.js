@@ -1,9 +1,9 @@
-import "../css/Trail.css"
+import "../css/Block.css"
 
 import { Button } from "@mui/material"
 
 
-function Trial(props) {
+function Block(props) {
 
     const logo = ()=>{
         if(props.type=="congruent"){
@@ -40,4 +40,4 @@ function Trial(props) {
 }
 
 
-export default Trial;
+export default Block;

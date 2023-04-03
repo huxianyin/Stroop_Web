@@ -1,5 +1,4 @@
-
-import "../css/Trail.css"
+import CompoundBlock from "./CompoundBlock";
 
 function CompoundedBlocks(props) {
     const default_trail_duration = 2;
@@ -9,10 +8,7 @@ function CompoundedBlocks(props) {
     const default_shuffle_across_trial_type = false;
     const default_present_style_within_trial_type = "random" // inclusive-order" , "inclusive-shuffle"
     const data=[
-        {title:"一致","type":"congurent","n":default_n,"present_style":default_present_style_within_trial_type},
-        {title:"不一致","type":"incongurent","n":default_n,"present_style":default_present_style_within_trial_type},
-        {title:"CO","type":"color-only","n":default_n,"present_style":default_present_style_within_trial_type},
-        {title:"WO","type":"word-only","n":default_n,"present_style":default_present_style_within_trial_type},
+        {title:"standard","n_congruent":10,"n_incongruent":10,"n_word-only":10,"n_color-only":10,"presentation_duration":2000,"retention_interval":1000}
     ]
 
     return (
@@ -20,7 +16,7 @@ function CompoundedBlocks(props) {
             <h1>Compounded Blocks</h1>
 
             <div>
-
+                <CompoundBlock data={data[0]}></CompoundBlock>
             </div>
         </div>
     );

@@ -1,9 +1,11 @@
 # Stroop Web Application
 A web application for stroop task that experimenters can customize their own stroop task easily! 
+> 🧩 Have A Try!
+> 
 > drag and drop basic building blocks to design a stroop task!
+
+
 ![screenshot](./public/screenshot.png)
-
-
 
 # For Task Designers
 - Add color-word pairs to preset

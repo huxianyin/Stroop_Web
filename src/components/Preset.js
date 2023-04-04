@@ -20,14 +20,9 @@ function PresetElement(props){
     );
 }
 
-function Preset() {
+function Preset(props) {
     const [color, setColor] = React.useState('#ffffff')
     const [word, setWord] = React.useState('white')
-    const [data, setData] = useState([
-        {word:"red", color:"#ff0000"},
-        {word:"green", color:"#00ff00"},
-        {word:"blue", color:"#0000ff"}
-    ]);
 
     const [open, setOpen] = React.useState(false);
 
@@ -40,12 +35,12 @@ function Preset() {
     };
     
     const AddToPreset =() =>{
-        setData(data => [...data, {word:word,color:color}])
+        props.onAddPair(word,color);
         setOpen(false);
     }
 
     const RemoveFromPreset = (element)=>{
-        setData(data.filter(item => (item.word !== element.word) || (item.color !== element.color) ));
+        props.onRemovePair(element);
     }
 
     const handleColorChange = (color) => {
@@ -57,7 +52,7 @@ function Preset() {
         <div class='Preset'>
             <h1>Color-Word Pairs Preset</h1>
             <div class='PairContainer'>
-                {data.map(e => {
+                {props.data.map(e => {
                     
                     return <PresetElement onRemove={()=>RemoveFromPreset(e)} 
                     key={e.word+"-"+e.color} 

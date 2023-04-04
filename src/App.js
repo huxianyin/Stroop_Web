@@ -3,35 +3,190 @@ import logo from './resources/stroop.png'
 import Preset from './components/Preset';
 import BasicBlocks from './components/BasicBlocks';
 import CompoundedBlocks from './components/CompoundedBlocks';
-import { Button, TextField } from '@mui/material';
+import { Button, duration, TextField } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import { useState } from 'react';
 import Stroop from './components/Stroop';
 
 function App() {
-  const default_present_duration = 2000;
-  const default_retention_interval = 1000;
-
-  const initData = [
-    {"type":"congruent", "n":10, "duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"incongruent", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"word-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"read-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"rest", "dur":10,"text":"休憩してください"},
-
-    {"type":"word-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"incongruent", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"congruent", "n":10, "duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"read-only", "n":10,"duration":default_present_duration, "retention_interval":default_retention_interval},
-    {"type":"rest", "dur":20,"text":"休憩してください"},
+  const initPreset = [
+    {word:"red", color:"#ff0000"},
+    {word:"green", color:"#00ff00"},
+    {word:"blue", color:"#0000ff"}
   ]
 
   const [started, setStarted] = useState(false);
-  const [taskData, setTaskData] = useState(initData);
-  const [preset, setPreset] = useState([]);
+  const [taskData, setTaskData] = useState([]);
+  const [shuffleAcorssTT, setShuffleAcrossTT] = useState(true);
+
+  const [preset, setPreset] = useState(initPreset);
+  const [trialIdx, setTrailIdx] = useState(-1);
+  //for change detial of a setting
+  const [nth,setNth] = useState(0);
+  const [ri, setRI] = useState(0);
+  const [dur,setDur] = useState(0);
+  const [restText, setRestText] = useState("");
+  const [restDur, setRestDur] = useState("");
+ 
+
+  //for setting window
+  const [open, setOpen] = useState(false);
+  const handleClickSetting = (idx) => {
+    setTrailIdx(idx);
+    setOpen(true);
+
+    if(taskData[idx]["type"]=="rest"){
+      setRestText(taskData[idx]["text"]);
+      setRestDur(taskData[idx]["duration"]);
+    }
+    else{
+      setNth(taskData[idx]["n"]);
+      setDur(taskData[idx]["duration"])
+      setRI(taskData[idx]["retention_interval"]);
+    }
+    
+    
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleSubmit = () =>{
+    const type = taskData[trialIdx]["type"];
+    let data = [...taskData];
+    // 2. Make a shallow copy of the item you want to mutate
+    let trial = {...data[trialIdx]};
+
+    if(type=="rest"){
+      trial["duration"] = restDur;
+      trial["text"] = restText; 
+    }
+    else{
+      trial["n"] = nth;
+      trial["duration"] = dur;
+      trial["retention_interval"] = ri;
+    }
+    
+    data[trialIdx] = trial;
+    console.log(trial,data);
+    
+    setTaskData(data);
+
+    setOpen(false);
+    
+  }
+
+  const print_data = (data) => {
+    var show_string = "";
+    data.forEach((item)=>{
+      show_string = show_string + JSON.stringify(item) + "\n";
+    })
+    return show_string;
+  }
+  
+
+  const rest_dialog_content = () =>{
+    return (
+      <div>
+        <TextField
+          required
+          autoFocus
+          margin="dense"
+          type="number"
+          fullWidth
+          variant="standard"
+          label="Rest Duration (s)"
+          defaultValue={restDur}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setRestDur(event.target.value);
+            }}
+      />
+      <TextField
+          required
+          autoFocus
+          margin="dense"
+          type="text"
+          fullWidth
+          variant="standard"
+          label="Rest Text"
+          defaultValue={restText}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setRestText(event.target.value);
+            }}
+      />
+      </div>
+
+    )
+  }
+
+  const trail_dialog_content = () =>{
+    return (
+      <div>
+         <TextField
+          required
+          autoFocus
+          margin="dense"
+          type="number"
+          fullWidth
+          variant="standard"
+          label="N"
+          defaultValue={nth}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setNth(event.target.value);
+            }}
+      />
+      <TextField
+          required
+          autoFocus
+          margin="dense"
+          type="number"
+          fullWidth
+          variant="standard"
+          label="Present Duration (ms)"
+          defaultValue={dur}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setDur(event.target.value);
+            }}
+      />
+      <TextField
+          required
+          autoFocus
+          margin="dense"
+          type="number"
+          fullWidth
+          variant="standard"
+          label="Rentention Interval (ms)"
+          defaultValue={ri}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setRI(event.target.value);
+            }}
+      />
+       
+      </div>
+
+    )
+  }
+
+
+//for manipulate task data
+  const onRemovePair = (element)=>{
+    setPreset(preset.filter(item => (item.word !== element.word) || (item.color !== element.color) ));
+  }
+
+  const onAddPair = (word,color) =>{
+    setPreset(preset => [...preset, {word:word,color:color}])
+  }
+
+  const onAddTrials = (trail_data) => {
+    setTaskData(taskData => [...taskData, trail_data])
+  }
 
   const flow_block = (data,idx) =>{
     const class_var = 'flowBlock'+' '+data.type;
@@ -40,14 +195,25 @@ function App() {
       <div className='info'>
           <span>{data.type}</span>
           
-          {data.type!=="rest"?<span> x {data.n}</span>:<span> for {data.dur} (sec)</span>}
+          {data.type!=="rest"?<span> x {data.n}</span>:<span> for {data.duration}s</span>}
       </div>
       <div className="detail">
         {data.type!=="rest"?　<span>{data.duration/1000}s,{data.retention_interval/1000}s</span>
         :<span>{data.text}</span>}
       </div>
-      <Button>Setting</Button>
+      <Button onClick={()=>handleClickSetting(idx)}>Setting</Button>
     </div>
+  }
+
+  const onStart = () => {
+
+    if(taskData.length>0){
+      setStarted(true)
+    }
+    else {
+      alert("No designed task data");
+    }
+    
   }
 
   return (
@@ -62,25 +228,49 @@ function App() {
 
         <div className='body'>
           <div className="left">
-            <Preset></Preset>
-            <BasicBlocks></BasicBlocks>
-            <CompoundedBlocks></CompoundedBlocks>
+            <Preset onAddPair={onAddPair} onRemovePair={onRemovePair} data={preset}></Preset>
+            <BasicBlocks onAddTrials={onAddTrials}></BasicBlocks>
+            <CompoundedBlocks onAddTrials={onAddTrials}></CompoundedBlocks>
           </div>
 
           <div className='right'>
             <h1>Designed Task</h1>
             <div className='Inputs'>
-              <FormControlLabel control={<Checkbox defaultChecked />} label="Shuffle Across Trial Types"/>
-              <Button variant='outlined'> Clear </Button>
+              <FormControlLabel 
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setShuffleAcrossTT(event.target.value);
+                    
+                  }}
+                  control={<Checkbox defaultValue={shuffleAcorssTT} />} 
+                  label="Shuffle Across Trial Types"/>
+              <Button variant='outlined' onClick={()=>{setTaskData([])}}> Clear </Button>
             </div>
-            <Button variant="contained" className="StartBtn" onClick= {()=>{setStarted(true)}}>Start</Button>
+            <Button variant="contained" className="StartBtn" onClick= {onStart}>Start</Button>
+            <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(taskData))}}>Check Task Data</Button>
+            <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(preset))}}>Check Preset Data</Button>
             
             <div className='DesignedTask'>
                 {taskData.map((item,idx)=>{return flow_block(item,idx)})}
-                <div className='finishBlock'><span>finish</span></div>
+                {taskData.length>1 ? <div className='finishBlock'><span>finish</span></div> : <div></div>}
               </div>
           </div>
           
+          {trialIdx>=0 && taskData.length>0?
+          <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Set the detail of this trial block</DialogTitle>
+
+                <DialogContent>
+                  {taskData[trialIdx]["type"]=="rest"?rest_dialog_content():trail_dialog_content()}
+                </DialogContent> 
+
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleSubmit}>Submit</Button>
+                </DialogActions>
+          </Dialog> :
+          <div></div>
+          }
+
         </div>
         <footer>
           <span>developed by <a href='http://www.lhei.k.u-tokyo.ac.jp/'>Heilab</a></span>

@@ -7,17 +7,35 @@ import {TextField,Checkbox} from '@mui/material';
 import { useState } from "react";
 
 function CompoundBlock(props) {
-    const [n_congruent, setN_congruent] = useState(10);
-    const [n_incongruent, setN_incongruent] = useState(10);
-    const [n_word_only, setN_word_only] = useState(10);
-    const [n_color_only, setN_color_only] = useState(10);
-    const [duration, setDuration] = useState(2000);
-    const [retentionInterval, setRententionInterval] = useState(1000);
+    const default_retention_interval = 1000;
+    const default_present_duration = 2*1000;
+    const default_n = 10;
 
+    const [n_congruent, setN_congruent] = useState(default_n);
+    const [n_incongruent, setN_incongruent] = useState(default_n);
+    const [n_word_only, setN_word_only] = useState(default_n);
+    const [n_color_only, setN_color_only] = useState(default_n);
+    const [duration, setDuration] = useState(default_present_duration);
+    const [retentionInterval, setRententionInterval] = useState(default_retention_interval);
+
+    const onAdd = ()=>{
+        if(n_congruent > 0){
+            props.onAddTrials({"type":"congruent","n":n_congruent, "duration":default_present_duration,"retention_interval":retentionInterval});
+        }
+        if(n_incongruent > 0){
+            props.onAddTrials({"type":"incongruent","n":n_incongruent, "duration":default_present_duration,"retention_interval":retentionInterval});
+        }
+        if(n_word_only > 0){
+            props.onAddTrials({"type":"word-only","n":n_word_only, "duration":default_present_duration,"retention_interval":retentionInterval});
+        }
+        if(n_color_only > 0){
+            props.onAddTrials({"type":"color-only","n":n_color_only, "duration":default_present_duration,"retention_interval":retentionInterval});
+        }
+    }
 
     return (
         <div className="CompoundBlock">
-            <h2>{props.data.title}</h2>
+            <h2>{props.title}</h2>
 
             <div className="gridContainer">
             <TextField className="input"
@@ -27,31 +45,35 @@ function CompoundBlock(props) {
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setN_congruent(event.target.value);
                 }}
+                type="number"
                 />
             <TextField className="input"
                 id="outlined-controlled"
                 label="Num of incongruent trials"
                 value={n_incongruent}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setN_congruent(event.target.value);
+                    setN_incongruent(event.target.value);
                 }}
+                type="number"
                 />
             <TextField className="input"
                 id="outlined-controlled"
                 label="Num of word-only trials"
                 value={n_word_only}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setN_congruent(event.target.value);
+                    setN_word_only(event.target.value);
                 }}
+                type="number"
                 />
             <TextField className="input"
                 id="outlined-controlled"
                 label="Num of color-only trials"
                 value={n_color_only}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setN_congruent(event.target.value);
+                    setN_color_only(event.target.value);
                 }}
                 InputLabelProps={{ shrink: true }}
+                type="number"
                 />
 
 
@@ -63,6 +85,7 @@ function CompoundBlock(props) {
                     setDuration(event.target.value);
                 }}
                 InputLabelProps={{ shrink: true }}
+                type="number"
                 />
 
             <TextField className="input"
@@ -73,9 +96,12 @@ function CompoundBlock(props) {
                     setRententionInterval(event.target.value);
                 }}
                 InputLabelProps={{ shrink: true }}
+                type="number"
                 />
             </div>
-            <Button className="AddBtn">+</Button>
+
+          
+            <Button className="AddBtn" onClick={onAdd}>+</Button>
         </div>
     );
 

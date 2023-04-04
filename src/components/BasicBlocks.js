@@ -1,7 +1,7 @@
 import Block from "./Block";
 
 
-function BasicBlocks() {
+function BasicBlocks(props) {
     const data = [
         {title:"Congruent",type:"congruent"},
         {title:"Incongruent",type:"incongruent"},
@@ -20,6 +20,7 @@ function BasicBlocks() {
                         return <Block
                         title={item.title}
                         type={item.type}
+                        onAddTrials={props.onAddTrials}
                         ></Block>
                     })
                 }

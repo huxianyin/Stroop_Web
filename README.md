@@ -2,7 +2,7 @@
 A web application for stroop task that experimenters can customize their own stroop task easily! 
 > **🧩 Have A Try!**
 > 
-> Design a stroop task! All you have to do is click buttons
+> Design a stroop task! All you have to do is a few of clicks
 
 
 ![screenshot](./public/screenshot.png)

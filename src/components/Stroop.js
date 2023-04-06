@@ -1,10 +1,17 @@
 
 import "../css/Stroop.css"
 import { useState, useEffect } from "react";
-
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 function Stroop(props) {
     const rentation_mark = {"word":"+","color":"white"}
+
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+      } = useSpeechRecognition();
     
     const [stimulus, setStimulus] = useState({"word":"_","color":"white"});
     const [startTime, setStartTime] = useState(-1);
@@ -129,10 +136,15 @@ function Stroop(props) {
         const stimuli_present_duration = trial.dur;
         var rentention_interval = 0;
         if("ri" in trial) rentention_interval = trial.ri;
+        SpeechRecognition.startListening();
         setStimulus(trial);
         await sleep(stimuli_present_duration);
 
+        SpeechRecognition.stopListening();
+        resetTranscript();
         setStimulus(rentation_mark);
+        
+
         await sleep(rentention_interval);
     }
     setFinished(true);
@@ -147,7 +159,17 @@ function Stroop(props) {
             }}>Start</button>
         }
         else if(!finished){
-            return <span style={{color:stimulus.color}}>{stimulus.word}</span>
+            if (!browserSupportsSpeechRecognition) {
+                return (<div>
+                        <span>Browser doesn't support speech recognition.</span>;
+                        <button className="BigBtn" onClick={props.onFinished}>Finished</button>
+                    </div>)
+            }
+            return (
+            <div>
+                <span class="stimuli" style={{color:stimulus.color}}>{stimulus.word}</span>
+                <p className="transcript">{transcript}</p>
+            </div>);
         }
         else{
             return <button className="BigBtn" onClick={props.onFinished}>Finished</button>

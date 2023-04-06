@@ -5,9 +5,14 @@
     width: 100vw;
 }
 
-.StroopPage>span {
+.stimuli {
     color: white;
     font-size: 30vh;
+}
+
+.transcript {
+    font-size: 10vh;
+    color: gray;
 }
 
 .BigBtn {

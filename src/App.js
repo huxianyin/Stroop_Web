@@ -3,18 +3,20 @@ import logo from './resources/stroop.png'
 import Preset from './components/Preset';
 import BasicBlocks from './components/BasicBlocks';
 import CompoundedBlocks from './components/CompoundedBlocks';
-import { Button, duration, TextField } from '@mui/material';
-import FormGroup from '@mui/material/FormGroup';
+import { Button, TextField } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { useState } from 'react';
 import Stroop from './components/Stroop';
+
+Array.prototype.insert = function ( index, ...items ) {
+  this.splice( index, 0, ...items );
+};
 
 function App() {
   const initPreset = [
@@ -25,7 +27,8 @@ function App() {
 
   const [started, setStarted] = useState(false);
   const [taskData, setTaskData] = useState([]);
-  const [shuffleAcorssTT, setShuffleAcrossTT] = useState(true);
+  const [stimuliData, setStimuliData] = useState([]);
+  const [shuffleAcorssTT, setShuffleAcrossTT] = useState(false);
 
   const [preset, setPreset] = useState(initPreset);
   const [trialIdx, setTrailIdx] = useState(-1);
@@ -43,7 +46,7 @@ function App() {
     setTrailIdx(idx);
     setOpen(true);
 
-    if(taskData[idx]["type"]=="rest"){
+    if(taskData[idx]["type"]==="rest"){
       setRestText(taskData[idx]["text"]);
       setRestDur(taskData[idx]["duration"]);
     }
@@ -64,21 +67,18 @@ function App() {
     // 2. Make a shallow copy of the item you want to mutate
     let trial = {...data[trialIdx]};
 
-    if(type=="rest"){
-      trial["duration"] = restDur;
+    if(type==="rest"){
+      trial["duration"] = parseInt(restDur);
       trial["text"] = restText; 
     }
     else{
-      trial["n"] = nth;
-      trial["duration"] = dur;
-      trial["retention_interval"] = ri;
+      trial["n"] = parseInt(nth);
+      trial["duration"] = parseInt(dur);
+      trial["retention_interval"] = parseInt(ri);
     }
     
-    data[trialIdx] = trial;
-    console.log(trial,data);
-    
+    data[trialIdx] = trial;    
     setTaskData(data);
-
     setOpen(false);
     
   }
@@ -215,7 +215,7 @@ function App() {
     }
     
   }
-
+  
   return (
     <div>
       {!started?
@@ -236,18 +236,17 @@ function App() {
           <div className='right'>
             <h1>Designed Task</h1>
             <div className='Inputs'>
-              <FormControlLabel 
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setShuffleAcrossTT(event.target.value);
-                    
-                  }}
-                  control={<Checkbox defaultValue={shuffleAcorssTT} />} 
-                  label="Shuffle Across Trial Types"/>
+            <span className='label'>Shuffle Across Trial Type</span>
+              <Checkbox
+                onClick={() => {
+                setShuffleAcrossTT(!shuffleAcorssTT);
+              }}/> 
+                  
               <Button variant='outlined' onClick={()=>{setTaskData([])}}> Clear </Button>
             </div>
-            <Button variant="contained" className="StartBtn" onClick= {onStart}>Start</Button>
-            <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(taskData))}}>Check Task Data</Button>
-            <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(preset))}}>Check Preset Data</Button>
+            <Button variant="contained" className="StartBtn" onClick= {onStart}>Go To Task</Button>
+            {/* <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(taskData));}}>Check Task Data</Button>
+            <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(preset))}}>Check Preset Data</Button> */}
             
             <div className='DesignedTask'>
                 {taskData.map((item,idx)=>{return flow_block(item,idx)})}
@@ -275,7 +274,7 @@ function App() {
         <footer>
           <span>developed by <a href='http://www.lhei.k.u-tokyo.ac.jp/'>Heilab</a></span>
         </footer>
-      </div> :<Stroop onFinished={()=>{setStarted(false);}}/>
+      </div> :<Stroop onFinished={()=>{setStarted(false);}} taskData={taskData} preset={preset} shuffleAcorssTT={shuffleAcorssTT}/>
       }
     </div>
   );

@@ -5,7 +5,9 @@ A web application for stroop task that experimenters can customize their own str
 > Design a stroop task! All you have to do is a few of clicks
 
 
-![screenshot](./public/screenshot.png)
+https://user-images.githubusercontent.com/34026599/230554501-e3d59e90-ee59-45ad-af86-f752493bdd5a.mp4
+
+
 
 # For Task Designers (How to design a stroop task)
 - Add color-word pairs to preset

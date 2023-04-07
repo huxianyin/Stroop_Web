@@ -7,7 +7,7 @@ import { Button } from "@mui/material"
 
 function Block(props) {
     const default_retention_interval = 1000; //ms
-    const default_present_duration = 2*1000; //ms
+    const default_present_duration = 3*1000; //ms
     const default_n = 10; 
     const default_rest_dur = 30; //s 
     const default_rest_text = "休憩してください";

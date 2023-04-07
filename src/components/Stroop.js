@@ -2,9 +2,12 @@
 import "../css/Stroop.css"
 import { useState, useEffect } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import { Button } from "@mui/material";
+
+const options = ["red","blue","green","orange"];
 
 function Stroop(props) {
-    const rentation_mark = {"word":"+","color":"white"}
+    const rentation_mark = {"word":"+","color":"white","opts":[]}
 
     const {
         transcript,
@@ -13,7 +16,7 @@ function Stroop(props) {
         browserSupportsSpeechRecognition
       } = useSpeechRecognition();
     
-    const [stimulus, setStimulus] = useState({"word":"_","color":"white"});
+    const [stimulus, setStimulus] = useState({"word":"_","color":"white","opts":[]});
     const [startTime, setStartTime] = useState(-1);
     const [finished, setFinished] = useState(false);
 
@@ -22,6 +25,7 @@ function Stroop(props) {
     useEffect(() => {
         GenerateStimuliArray();
     }, [startTime])
+
 
   const GenerateStimuliArray = ()=>{
     if(props.taskData.length==0) return;
@@ -50,7 +54,7 @@ function Stroop(props) {
       }
     });
     if(props.shuffleAcorssTT){
-        console.log("shuffled!!!");
+        //console.log("shuffled!!!");
         shuffle(stimuli_array);
     }
     //add rest block
@@ -58,19 +62,23 @@ function Stroop(props) {
       stimuli_array.insert(trial.idx,{"word":trial.text,"color":"white","dur":trial.dur*1000});
     })
     setData(stimuli_array);
-  }
 
+  }
 
 
   const GenerateNeutralStimuli = (n,type,dur,ri)=>{
     const aug_preset = getAugmentedPreset(n);
     shuffle(aug_preset);
-    var res = []
+    var res = [];
     aug_preset.map((pair)=>{
       if(type=="word-only"){
+        //const opts = getRandomSubset(pair.word,"#ffffff").map((item)=>item.word);
         res.push({"word":pair.word,"color":"#ffffff","dur":dur,"ri":ri});
+
+        
       }
       else if(type=="color-only"){
+        //const opts = getRandomSubset("■",pair.color).map((item)=>item.word);
         res.push({"word":"■","color":pair.color,"dur":dur,"ri":ri});
       }
     })
@@ -80,6 +88,7 @@ function Stroop(props) {
   const GenerateCongruentStimuli = (n,dur,ri)=>{
     var res = [];
     getAugmentedPreset(n).map((pair)=>{
+      //const opts = getRandomSubset(pair.word,pair.color).map((item)=>item.word);
       res.push({"word":pair.word,"color":pair.color,"dur":dur,"ri":ri});
     });
     return res;
@@ -89,6 +98,7 @@ function Stroop(props) {
     var res = [];
     getAugmentedPreset(n).map((pair)=>{
       const color = pick_other_color(pair.word);
+      //const opts = getRandomSubset(pair.word,color).map((item)=> item.word);
       res.push({"word":pair.word,"color":color,"dur":dur,"ri":ri});
     });
     return res;
@@ -109,6 +119,25 @@ function Stroop(props) {
     }
     return res.slice(0,n);
   }
+
+  // const getRandomSubset = (word,color) => {
+  //   let tmpset = props.preset.slice();
+  //   let answer = tmpset.filter(item => item.color===color)[0]["word"];
+
+  //   let others = tmpset.filter(item => (item.word!==word && item.color!==color));
+  //   shuffle(others);
+
+  //   let res = others.slice(0,props.optionsN-2);
+
+  //   var insert_idx = Math.floor(Math.random()* (props.optionsN-2));
+  //   res.insert(insert_idx,{"word":answer});
+
+  //   if(word!=="■"){
+  //     insert_idx = Math.floor(Math.random()* (props.optionsN-1));
+  //     res.insert(insert_idx,{"word":word});
+  //   }
+  //   return res;
+  // }
 
   const shuffle = (array)=> {
     let currentIndex = array.length,  randomIndex;
@@ -136,12 +165,22 @@ function Stroop(props) {
         const stimuli_present_duration = trial.dur;
         var rentention_interval = 0;
         if("ri" in trial) rentention_interval = trial.ri;
-        SpeechRecognition.startListening();
+
+
+        if(props.modality=="speech") 
+        {
+          SpeechRecognition.startListening();
+        }
+
         setStimulus(trial);
         await sleep(stimuli_present_duration);
 
-        SpeechRecognition.stopListening();
-        resetTranscript();
+        if(props.modality=="speech") {
+          SpeechRecognition.stopListening()
+          resetTranscript();
+        }
+        ;
+        
         setStimulus(rentation_mark);
         
 
@@ -168,7 +207,16 @@ function Stroop(props) {
             return (
             <div>
                 <span class="stimuli" style={{color:stimulus.color}}>{stimulus.word}</span>
-                <p className="transcript">{transcript}</p>
+                {props.modality=="speech"?  <p className="transcript">Your Answer:{transcript}</p> : 
+                  <div className="Options">
+                    {options.map((item,idx) => {
+                      return (<div className="option">
+                        {/* <span key={idx}>{item}</span> */}
+                        <Button className="option-btn" variant="text">{item}!!!</Button>
+                      </div>);
+                    })}
+                  </div>
+                }
             </div>);
         }
         else{

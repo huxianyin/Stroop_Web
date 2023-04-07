@@ -10,6 +10,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 import { useState } from 'react';
 import Stroop from './components/Stroop';
@@ -27,8 +29,9 @@ function App() {
 
   const [started, setStarted] = useState(false);
   const [taskData, setTaskData] = useState([]);
-  const [stimuliData, setStimuliData] = useState([]);
   const [shuffleAcorssTT, setShuffleAcrossTT] = useState(false);
+  const [modality, setModality] = useState('motor');
+  const [optionNum, setOptionNum] = useState(2);
 
   const [preset, setPreset] = useState(initPreset);
   const [trialIdx, setTrailIdx] = useState(-1);
@@ -207,14 +210,19 @@ function App() {
 
   const onStart = () => {
 
-    if(taskData.length>0){
-      setStarted(true)
-    }
-    else {
+    if(taskData.length<=0){
       alert("No designed task data");
+      return;
     }
+    if(optionNum<2 || optionNum>preset.length){
+      alert("Option Num should be greater than 1 and less than the number of pairs in the preset");
+      return;
+    }
+
+    setStarted(true)
     
   }
+
   
   return (
     <div>
@@ -236,14 +244,33 @@ function App() {
           <div className='right'>
             <h1>Designed Task</h1>
             <div className='Inputs'>
-            <span className='label'>Shuffle Across Trial Type</span>
-              <Checkbox
-                onClick={() => {
-                setShuffleAcrossTT(!shuffleAcorssTT);
-              }}/> 
-                  
-              <Button variant='outlined' onClick={()=>{setTaskData([])}}> Clear </Button>
+              <div>
+                <span>Input Modality: </span>
+                <Select className='select'
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{setModality(event.target.value); setOptionNum(2);}}
+                  defaultValue={"motor"}
+                >
+                  <MenuItem value={"speech"}>Speech👄</MenuItem>
+                  <MenuItem value={"motor"}>Motor👆</MenuItem>
+                </Select>
+              </div>
+            <div>
+               <span>Shuffle Across Trial Type:</span>
+                <Checkbox
+                  onClick={() => {
+                  setShuffleAcrossTT(!shuffleAcorssTT);
+                }}/> 
             </div>
+            <Button variant='outlined' onClick={()=>{setTaskData([])}}> Clear </Button>
+            </div>
+            
+
+            {modality=="motor"? <div className="Option">
+                <span>Option Num:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <TextField defaultValue={2} onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{setOptionNum(event.target.value);}}
+                variant='standard' type="number"></TextField>
+              </div> : <div></div>}
+
             <Button variant="contained" className="StartBtn" onClick= {onStart}>Go To Task</Button>
             {/* <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(taskData));}}>Check Task Data</Button>
             <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(preset))}}>Check Preset Data</Button> */}
@@ -274,7 +301,8 @@ function App() {
         <footer>
           <span>developed by <a href='http://www.lhei.k.u-tokyo.ac.jp/'>Heilab</a></span>
         </footer>
-      </div> :<Stroop onFinished={()=>{setStarted(false);}} taskData={taskData} preset={preset} shuffleAcorssTT={shuffleAcorssTT}/>
+      </div> :<Stroop modality={modality} optionsN={optionNum}
+      onFinished={()=>{setStarted(false);}} taskData={taskData} preset={preset} shuffleAcorssTT={shuffleAcorssTT}/>
       }
     </div>
   );

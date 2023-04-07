@@ -24,3 +24,28 @@
     background-color: transparent;
     border: solid 10px;
 }
+
+.Options{
+    width: 100vw;
+    height: 40vh;
+    text-align: center;
+    margin-top: 10vh;
+    padding: "5%";
+    justify-content: space-evenly;
+    display: flex;
+    flex-direction: row;
+}
+
+.option{
+    font-size: 8vh;
+    border: solid white 5px;
+    padding: 20px;
+    margin: 10px;
+    align-self: center;
+
+}
+
+.option-btn{
+    color:white;
+   
+}

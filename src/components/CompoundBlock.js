@@ -20,16 +20,16 @@ function CompoundBlock(props) {
 
     const onAdd = ()=>{
         if(n_congruent > 0){
-            props.onAddTrials({"type":"congruent","n":n_congruent, "duration":default_present_duration,"retention_interval":retentionInterval});
+            props.onAddTrials({"type":"congruent","n":n_congruent, "duration":duration,"retention_interval":retentionInterval});
         }
         if(n_incongruent > 0){
-            props.onAddTrials({"type":"incongruent","n":n_incongruent, "duration":default_present_duration,"retention_interval":retentionInterval});
+            props.onAddTrials({"type":"incongruent","n":n_incongruent, "duration":duration,"retention_interval":retentionInterval});
         }
         if(n_word_only > 0){
-            props.onAddTrials({"type":"word-only","n":n_word_only, "duration":default_present_duration,"retention_interval":retentionInterval});
+            props.onAddTrials({"type":"word-only","n":n_word_only, "duration":duration,"retention_interval":retentionInterval});
         }
         if(n_color_only > 0){
-            props.onAddTrials({"type":"color-only","n":n_color_only, "duration":default_present_duration,"retention_interval":retentionInterval});
+            props.onAddTrials({"type":"color-only","n":n_color_only, "duration":duration,"retention_interval":retentionInterval});
         }
     }
 

@@ -31,7 +31,7 @@ function App() {
   const [taskData, setTaskData] = useState([]);
   const [shuffleAcorssTT, setShuffleAcrossTT] = useState(false);
   const [modality, setModality] = useState('motor');
-  const [optionNum, setOptionNum] = useState(2);
+  const [options, setOptions] = useState('red,green,blue');
 
   const [preset, setPreset] = useState(initPreset);
   const [trialIdx, setTrailIdx] = useState(-1);
@@ -209,18 +209,26 @@ function App() {
   }
 
   const onStart = () => {
-
+    const optionNum = options.split(',').length;
     if(taskData.length<=0){
       alert("No designed task data");
       return;
     }
-    if(optionNum<2 || optionNum>preset.length){
-      alert("Option Num should be greater than 1 and less than the number of pairs in the preset");
+    if(optionNum<2){
+      alert("Invalid Options (At least 2 options needed)");
       return;
     }
 
     setStarted(true)
-    
+  }
+
+  const GenerateOptionsFromPreset = ()=>{
+    var res = "";
+    preset.map((item,idx)=>{
+      res += item.word;
+      if(idx<preset.length-1) res+=",";
+    })
+    setOptions(res);
   }
 
   
@@ -247,7 +255,7 @@ function App() {
               <div>
                 <span>Input Modality: </span>
                 <Select className='select'
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{setModality(event.target.value); setOptionNum(2);}}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{setModality(event.target.value);}}
                   defaultValue={"motor"}
                 >
                   <MenuItem value={"speech"}>Speech👄</MenuItem>
@@ -266,10 +274,13 @@ function App() {
             
 
             {modality=="motor"? <div className="Option">
-                <span>Option Num:&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <TextField defaultValue={2} onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{setOptionNum(event.target.value);}}
-                variant='standard' type="number"></TextField>
-              </div> : <div></div>}
+                <span>Options:&nbsp;&nbsp;(seperate with common)&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <Button variant='outlined' onClick={GenerateOptionsFromPreset}>Generate From Preset</Button>
+                <TextField onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{setOptions(event.target.value);}}
+                variant='filled' fullWidth required type="text" defaultValue={"red,green,blue"} value={options}></TextField>
+               
+              </div> : <div></div>
+            }
 
             <Button variant="contained" className="StartBtn" onClick= {onStart}>Go To Task</Button>
             {/* <Button variant="outlined" className="StartBtn" onClick= {()=>{alert(print_data(taskData));}}>Check Task Data</Button>
@@ -301,7 +312,7 @@ function App() {
         <footer>
           <span>developed by <a href='http://www.lhei.k.u-tokyo.ac.jp/'>Heilab</a></span>
         </footer>
-      </div> :<Stroop modality={modality} optionsN={optionNum}
+      </div> :<Stroop modality={modality} options={options}
       onFinished={()=>{setStarted(false);}} taskData={taskData} preset={preset} shuffleAcorssTT={shuffleAcorssTT}/>
       }
     </div>

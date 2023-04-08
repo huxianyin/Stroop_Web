@@ -1,13 +1,13 @@
 
 import "../css/Stroop.css"
+import "../css/btns.css"
 import { useState, useEffect } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Button } from "@mui/material";
 
-const options = ["red","blue","green","orange"];
 
 function Stroop(props) {
-    const rentation_mark = {"word":"+","color":"white","opts":[]}
+    const rentation_mark = {"word":"+","color":"#000000","opts":[]}
 
     const {
         transcript,
@@ -19,11 +19,13 @@ function Stroop(props) {
     const [stimulus, setStimulus] = useState({"word":"_","color":"white","opts":[]});
     const [startTime, setStartTime] = useState(-1);
     const [finished, setFinished] = useState(false);
+    const [response, setResponse] = useState('');
 
     const [data, setData] = useState([]);
 
     useEffect(() => {
         GenerateStimuliArray();
+        console.log(props.options)
     }, [startTime])
 
 
@@ -59,7 +61,7 @@ function Stroop(props) {
     }
     //add rest block
     insert_rest_locs.forEach(trial=>{
-      stimuli_array.insert(trial.idx,{"word":trial.text,"color":"white","dur":trial.dur*1000});
+      stimuli_array.insert(trial.idx,{"word":trial.text,"color":"#000000","dur":trial.dur*1000});
     })
     setData(stimuli_array);
 
@@ -120,25 +122,6 @@ function Stroop(props) {
     return res.slice(0,n);
   }
 
-  // const getRandomSubset = (word,color) => {
-  //   let tmpset = props.preset.slice();
-  //   let answer = tmpset.filter(item => item.color===color)[0]["word"];
-
-  //   let others = tmpset.filter(item => (item.word!==word && item.color!==color));
-  //   shuffle(others);
-
-  //   let res = others.slice(0,props.optionsN-2);
-
-  //   var insert_idx = Math.floor(Math.random()* (props.optionsN-2));
-  //   res.insert(insert_idx,{"word":answer});
-
-  //   if(word!=="■"){
-  //     insert_idx = Math.floor(Math.random()* (props.optionsN-1));
-  //     res.insert(insert_idx,{"word":word});
-  //   }
-  //   return res;
-  // }
-
   const shuffle = (array)=> {
     let currentIndex = array.length,  randomIndex;
   
@@ -179,6 +162,7 @@ function Stroop(props) {
           SpeechRecognition.stopListening()
           resetTranscript();
         }
+        setResponse('');
         ;
         
         setStimulus(rentation_mark);
@@ -207,16 +191,19 @@ function Stroop(props) {
             return (
             <div>
                 <span class="stimuli" style={{color:stimulus.color}}>{stimulus.word}</span>
-                {props.modality=="speech"?  <p className="transcript">Your Answer:{transcript}</p> : 
+                {props.modality==="motor"? 
                   <div className="Options">
-                    {options.map((item,idx) => {
+                    {props.options.split(',').map((item,idx) => {
                       return (<div className="option">
                         {/* <span key={idx}>{item}</span> */}
-                        <Button className="option-btn" variant="text">{item}!!!</Button>
+                        <button className="btn03 pushright"
+                        onClick={()=>{setResponse(item)}}
+                        ><span>{item}</span></button>
                       </div>);
-                    })}
-                  </div>
+                    }) }
+                  </div> :  <div></div>
                 }
+                <span className="transcript">{props.modality==="speech"?transcript:response}</span>
             </div>);
         }
         else{

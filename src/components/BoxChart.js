@@ -59,6 +59,7 @@ let init_data = {
 function BoxChart (props) {
     const generate_chart_data = () => {
         var res = init_data;
+        console.log(res);
         if(props.data){
             props.data.map((item)=>{
                 res.data[trial_type_indices[item["stimulus"]["trial_type"]]]["y"].push(item["rt"]/1000);

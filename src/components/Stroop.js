@@ -90,7 +90,9 @@ function Stroop(props) {
 
   const GenerateCongruentStimuli = (n,dur,ri)=>{
     var res = [];
-    getAugmentedPreset(n).map((pair)=>{
+    const aug_preset = getAugmentedPreset(n);
+    shuffle(aug_preset);
+    aug_preset.map((pair)=>{
       //const opts = getRandomSubset(pair.word,pair.color).map((item)=>item.word);
       res.push({"word":pair.word,"color":pair.color,"dur":dur,"ri":ri,"trial_type":"congruent"});
     });

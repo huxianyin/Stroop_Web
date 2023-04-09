@@ -24,6 +24,16 @@
     border: solid 10px;
 }
 
+.MidBtn {
+  width: 60vw;
+  height: 5vh;
+  margin-top: 1%;
+  font-size: 1vw;
+  color: black;
+  background-color: transparent;
+  border: solid 5px;
+}
+
 .Options{
     width: 100vw;
     height: 40vh;
@@ -50,6 +60,11 @@
     background-color: transparent;
     border: 0px;
    
+}
+
+.ChartContainer{
+  width: 100vw;
+  margin-top: 10vh;
 }
 
 /*--- btn-1 ---*/

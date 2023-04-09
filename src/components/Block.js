@@ -51,7 +51,7 @@ function Block(props) {
         <div className="BasicBlock">
             <p>{props.title}</p>
             {logo()}
-            <div class="ButtonContainer">
+            <div className="ButtonContainer">
             <Button className="AddBtn" onClick={onAdd}>+</Button>
             </div>
         </div>

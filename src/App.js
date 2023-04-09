@@ -16,6 +16,9 @@ import Select from '@mui/material/Select';
 import { useState } from 'react';
 import Stroop from './components/Stroop';
 
+import BoxChart from './components/BoxChart';
+
+
 Array.prototype.insert = function ( index, ...items ) {
   this.splice( index, 0, ...items );
 };
@@ -277,7 +280,9 @@ function App() {
                 <span>Options:&nbsp;&nbsp;(seperate with common)&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <Button variant='outlined' onClick={GenerateOptionsFromPreset}>Generate From Preset</Button>
                 <TextField onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{setOptions(event.target.value);}}
-                variant='filled' fullWidth required type="text" defaultValue={"red,green,blue"} value={options}></TextField>
+                variant='filled' fullWidth required type="text" value={options}
+                style={{"margin-top":"10px"}}
+                ></TextField>
                
               </div> : <div></div>
             }
@@ -307,7 +312,7 @@ function App() {
           </Dialog> :
           <div></div>
           }
-
+        
         </div>
         <footer>
           <span>developed by <a href='http://www.lhei.k.u-tokyo.ac.jp/'>Heilab</a></span>

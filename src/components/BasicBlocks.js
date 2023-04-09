@@ -16,8 +16,9 @@ function BasicBlocks(props) {
             <h1>Basic Blocks</h1>
             <div style={{display:"flex", flexWrap:"wrap"}}>
                 {
-                    data.map((item)=>{
+                    data.map((item,idx)=>{
                         return <Block
+                        key={idx}
                         title={item.title}
                         type={item.type}
                         onAddTrials={props.onAddTrials}

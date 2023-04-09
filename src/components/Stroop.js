@@ -3,7 +3,7 @@ import "../css/Stroop.css"
 import "../css/btns.css"
 import { useState, useEffect } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import { Button } from "@mui/material";
+import BoxChart from "./BoxChart";
 
 
 function Stroop(props) {
@@ -17,16 +17,17 @@ function Stroop(props) {
       } = useSpeechRecognition();
     
     const [stimulus, setStimulus] = useState({"word":"_","color":"white","opts":[]});
-    const [startTime, setStartTime] = useState(-1);
+    const [started, setStarted] = useState(false);
+    const [startTime, setStartTime] = useState(0);
     const [finished, setFinished] = useState(false);
     const [response, setResponse] = useState('');
+    const [resData, setResData] = useState([]);
 
     const [data, setData] = useState([]);
 
     useEffect(() => {
         GenerateStimuliArray();
-        console.log(props.options)
-    }, [startTime])
+    }, [])
 
 
   const GenerateStimuliArray = ()=>{
@@ -75,13 +76,13 @@ function Stroop(props) {
     aug_preset.map((pair)=>{
       if(type=="word-only"){
         //const opts = getRandomSubset(pair.word,"#ffffff").map((item)=>item.word);
-        res.push({"word":pair.word,"color":"#ffffff","dur":dur,"ri":ri});
+        res.push({"word":pair.word,"color":"#000000","dur":dur,"ri":ri,"trial_type":type});
 
         
       }
       else if(type=="color-only"){
         //const opts = getRandomSubset("■",pair.color).map((item)=>item.word);
-        res.push({"word":"■","color":pair.color,"dur":dur,"ri":ri});
+        res.push({"word":"■","color":pair.color,"dur":dur,"ri":ri,"trial_type":type});
       }
     })
     return res;
@@ -91,7 +92,7 @@ function Stroop(props) {
     var res = [];
     getAugmentedPreset(n).map((pair)=>{
       //const opts = getRandomSubset(pair.word,pair.color).map((item)=>item.word);
-      res.push({"word":pair.word,"color":pair.color,"dur":dur,"ri":ri});
+      res.push({"word":pair.word,"color":pair.color,"dur":dur,"ri":ri,"trial_type":"congruent"});
     });
     return res;
   }
@@ -101,7 +102,7 @@ function Stroop(props) {
     getAugmentedPreset(n).map((pair)=>{
       const color = pick_other_color(pair.word);
       //const opts = getRandomSubset(pair.word,color).map((item)=> item.word);
-      res.push({"word":pair.word,"color":color,"dur":dur,"ri":ri});
+      res.push({"word":pair.word,"color":color,"dur":dur,"ri":ri,"trial_type":"incongruent"});
     });
     return res;
   }
@@ -148,13 +149,11 @@ function Stroop(props) {
         const stimuli_present_duration = trial.dur;
         var rentention_interval = 0;
         if("ri" in trial) rentention_interval = trial.ri;
-
-
         if(props.modality=="speech") 
         {
           SpeechRecognition.startListening();
         }
-
+        setStartTime(Date.now());
         setStimulus(trial);
         await sleep(stimuli_present_duration);
 
@@ -163,21 +162,29 @@ function Stroop(props) {
           resetTranscript();
         }
         setResponse('');
-        ;
         
         setStimulus(rentation_mark);
+        setStartTime(0);
         
 
         await sleep(rentention_interval);
     }
     setFinished(true);
     }
+  
+  const onRespond = (res) => {
+    setResponse(res);
+    setResData(current => [...current, {"stimulus":stimulus,"rt":Date.now() - startTime}]);
+  }
 
+  const handleSaveData = ()=>{
+    //TODO : save resData to csv file
+  }
 
-    const render_func = () => {
-        if(startTime<0){
+  const render_func = () => {
+        if(!started){
             return <button className="BigBtn" onClick={()=>{
-                setStartTime(Date.now());
+                setStarted(true);
                 PresentStimulus();
             }}>Start</button>
         }
@@ -190,14 +197,14 @@ function Stroop(props) {
             }
             return (
             <div>
-                <span class="stimuli" style={{color:stimulus.color}}>{stimulus.word}</span>
+                <span className="stimuli" style={{color:stimulus.color}}>{stimulus.word}</span>
                 {props.modality==="motor"? 
                   <div className="Options">
                     {props.options.split(',').map((item,idx) => {
                       return (<div className="option">
                         {/* <span key={idx}>{item}</span> */}
                         <button className="btn03 pushright"
-                        onClick={()=>{setResponse(item)}}
+                        onClick={()=>{onRespond(item)}}
                         ><span>{item}</span></button>
                       </div>);
                     }) }
@@ -207,7 +214,11 @@ function Stroop(props) {
             </div>);
         }
         else{
-            return <button className="BigBtn" onClick={props.onFinished}>Finished</button>
+            return <div>
+              <div className="ChartContainer"><BoxChart data={resData}></BoxChart></div>
+              <button className="MidBtn" onClick={handleSaveData}>Download Data</button>
+              <button className="MidBtn" onClick={props.onFinished}>Back To Home</button>
+              </div>
         }
 
     }

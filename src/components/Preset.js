@@ -12,7 +12,7 @@ import { MuiColorInput } from 'mui-color-input'
 function PresetElement(props){
     const bg = { 'backgroundColor': props.color }
     return (
-        <div class='PresetElement' >
+        <div className='PresetElement' >
             <button onClick={props.onRemove}>x</button>
             <span>{props.word}:</span>
             <div style={bg}></div>
@@ -49,9 +49,9 @@ function Preset(props) {
 
 
     return (
-        <div class='Preset'>
+        <div className='Preset'>
             <h1>Color-Word Pairs Preset</h1>
-            <div class='PairContainer'>
+            <div className='PairContainer'>
                 {props.data.map(e => {
                     
                     return <PresetElement onRemove={()=>RemoveFromPreset(e)} 

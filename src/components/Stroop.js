@@ -181,6 +181,13 @@ function Stroop(props) {
 
   const handleSaveData = ()=>{
     //TODO : save resData to csv file
+    console.log(resData);
+    const element = document.createElement("a");
+    const textFile = new Blob([[JSON.stringify(resData)]], {type: 'text/plain'}); //pass data from localStorage API to blob
+    element.href = URL.createObjectURL(textFile);
+    element.download = "result.json";
+    document.body.appendChild(element); 
+    element.click();
   }
 
   const render_func = () => {

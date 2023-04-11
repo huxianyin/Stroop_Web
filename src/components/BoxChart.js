@@ -14,7 +14,7 @@ const options = {
       height: 350
     },
     title: {
-      text: 'Reaction Time in millisecond of each trial type',
+      text: 'Reaction Time in second of each trial type',
       align: 'center'
     },
     plotOptions: {
@@ -34,33 +34,31 @@ const options = {
     }
   };
 
-let init_data = {
-    data: [
-      {
-        x: 'incongruent',
-        y: []
-      },
-      {
-        x: 'color-only',
-        y: []
-      },
-      {
-        x: 'word-only',
-        y: []
-      },
-      {
-        x: 'congruent',
-        y: []
-      },
-    ]
-  }
 
 
 function BoxChart (props) {
     const generate_chart_data = () => {
-        var res = init_data;
-        console.log(res);
-        if(props.data){
+        var res = {
+          data: [
+            {
+              x: 'incongruent',
+              y: []
+            },
+            {
+              x: 'color-only',
+              y: []
+            },
+            {
+              x: 'word-only',
+              y: []
+            },
+            {
+              x: 'congruent',
+              y: []
+            },
+          ]
+        };
+        if(props.data && props.data.length>0){
             props.data.map((item)=>{
                 res.data[trial_type_indices[item["stimulus"]["trial_type"]]]["y"].push(item["rt"]/1000);
             });

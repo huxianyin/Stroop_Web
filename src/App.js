@@ -302,7 +302,7 @@ function App() {
                 <DialogTitle>Set the detail of this trial block</DialogTitle>
 
                 <DialogContent>
-                  {taskData[trialIdx]["type"]=="rest"?rest_dialog_content():trail_dialog_content()}
+                  {taskData.length>0  && taskData[trialIdx]["type"]=="rest"?rest_dialog_content():trail_dialog_content()}
                 </DialogContent> 
 
                 <DialogActions>

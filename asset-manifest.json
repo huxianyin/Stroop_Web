@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.4fbf88d3.css",
-    "main.js": "/static/js/main.abb9e88d.js",
-    "static/js/787.eaebf4e1.chunk.js": "/static/js/787.eaebf4e1.chunk.js",
-    "static/media/stroop.png": "/static/media/stroop.1cc1c23f345631a524c1.png",
-    "index.html": "/index.html",
-    "main.4fbf88d3.css.map": "/static/css/main.4fbf88d3.css.map",
-    "main.abb9e88d.js.map": "/static/js/main.abb9e88d.js.map",
-    "787.eaebf4e1.chunk.js.map": "/static/js/787.eaebf4e1.chunk.js.map"
+    "main.css": "/Stroop_Web/static/css/main.4fbf88d3.css",
+    "main.js": "/Stroop_Web/static/js/main.60217eec.js",
+    "static/js/787.eaebf4e1.chunk.js": "/Stroop_Web/static/js/787.eaebf4e1.chunk.js",
+    "static/media/stroop.png": "/Stroop_Web/static/media/stroop.1cc1c23f345631a524c1.png",
+    "index.html": "/Stroop_Web/index.html",
+    "main.4fbf88d3.css.map": "/Stroop_Web/static/css/main.4fbf88d3.css.map",
+    "main.60217eec.js.map": "/Stroop_Web/static/js/main.60217eec.js.map",
+    "787.eaebf4e1.chunk.js.map": "/Stroop_Web/static/js/787.eaebf4e1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4fbf88d3.css",
-    "static/js/main.abb9e88d.js"
+    "static/js/main.60217eec.js"
   ]
 }

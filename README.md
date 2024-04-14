@@ -9,7 +9,7 @@ https://user-images.githubusercontent.com/34026599/230554501-e3d59e90-ee59-45ad-
 
 
 
-# For Task Designers (How to design a stroop task)
+# How to design a stroop task
 - Add color-word pairs to preset
 - Add basic blocks of trails. there are 4 types of trails as following:
     - Congurent : where presented stimuli is a word and the ink of the word is the paried color in the preset.
